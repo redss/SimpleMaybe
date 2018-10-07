@@ -1,8 +1,17 @@
 # SimpleMaybe
 
+[![AppVeyor](https://img.shields.io/appveyor/ci/redss/simplemaybe.svg)](https://ci.appveyor.com/project/redss/simplemaybe)
+[![NuGet](https://img.shields.io/nuget/v/SimpleMaybe.svg)](https://www.nuget.org/packages/SimpleMaybe)
+
 _This library is under development!_
 
 This is a C# implementation of maybe/optional type.
+
+Installation:
+
+```
+PM> Install-Package SimpleMaybe
+```
 
 It was created because I needed maybe implementation which:
 
