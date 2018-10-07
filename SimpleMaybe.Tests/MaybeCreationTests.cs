@@ -28,8 +28,6 @@ namespace SimpleMaybe.Tests
 
             Action creatingSomeNullable = () => Maybe.Some<int?>(null);
             creatingSomeNullable.Should().Throw<InvalidOperationException>();
-
-            // todo: assert messages
         }
 
         [Test]
