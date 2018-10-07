@@ -1,46 +1,56 @@
-﻿namespace SimpleMaybe
+﻿using System.Diagnostics.Contracts;
+
+namespace SimpleMaybe
 {
+    [Pure]
     public static class Maybe
     {
-        public static Maybe<T> None<T>()
+        [Pure]
+        public static Maybe<TValue> None<TValue>()
         {
-            return new Maybe<T>();
+            return new Maybe<TValue>();
         }
 
-        public static Maybe<T> Some<T>(T value)
+        [Pure]
+        public static Maybe<TValue> Some<TValue>(TValue value)
         {
-            return new Maybe<T>(value: value);
+            return new Maybe<TValue>(value: value);
         }
 
-        public static Maybe<T> ToSome<T>(this T value)
+        [Pure]
+        public static Maybe<TValue> ToSome<TValue>(this TValue value)
         {
             return Some(value);
         }
 
-        public static Maybe<T> SomeOrNone<T>(T valueOrNull)
-            where T : class
+        [Pure]
+        public static Maybe<TValue> SomeOrNone<TValue>(TValue valueOrNull)
+            where TValue : class
         {
             return valueOrNull == null
-                ? None<T>()
+                ? None<TValue>()
                 : Some(valueOrNull);
         }
 
-        public static Maybe<T> ToSomeOrNone<T>(this T value)
-            where T : class
+        [Pure]
+        public static Maybe<TValue> ToSomeOrNone<TValue>(this TValue value)
+            where TValue : class
         {
             return SomeOrNone(value);
         }
 
-        public static Maybe<T> SomeOrNoneFromNullable<T>(T? value)
-            where T : struct
+        [Pure]
+        public static Maybe<TValue> SomeOrNoneFromNullable<TValue>(TValue? value)
+            where TValue : struct
         {
             return value == null
-                ? None<T>()
+                ? None<TValue>()
                 : Some(value.Value);
         }
 
-        public static Maybe<T> ToSomeOrNoneFromNullable<T>(this T? value)
-            where T : struct
+        [Pure]
+        public static Maybe<TValue> ToSomeOrNoneFromNullable<TValue>(this TValue? value)
+            where TValue : struct
         {
             return SomeOrNoneFromNullable(value);
         }

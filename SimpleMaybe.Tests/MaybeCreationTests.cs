@@ -2,6 +2,8 @@
 using FluentAssertions;
 using NUnit.Framework;
 
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed - we're testing for exceptions
+
 namespace SimpleMaybe.Tests
 {
     public class MaybeCreationTests

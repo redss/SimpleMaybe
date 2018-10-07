@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace SimpleMaybe
@@ -22,6 +23,7 @@ namespace SimpleMaybe
 
         // enumeration
 
+        [Pure]
         public IEnumerable<TValue> AsEnumerable()
         {
             if (_hasValue)
@@ -30,6 +32,7 @@ namespace SimpleMaybe
             }
         }
 
+        [Pure]
         public IEnumerator<TValue> GetEnumerator()
         {
             return AsEnumerable().GetEnumerator();
@@ -37,8 +40,10 @@ namespace SimpleMaybe
 
         // access
 
+        [Pure]
         public bool HasValue => _hasValue;
 
+        [Pure]
         public TValue ValueOrDefault(TValue defaultValue = default(TValue))
         {
             return _hasValue
@@ -46,6 +51,7 @@ namespace SimpleMaybe
                 : defaultValue;
         }
 
+        [Pure]
         public TValue ValueOrFail()
         {
             return _hasValue
@@ -106,6 +112,7 @@ namespace SimpleMaybe
 
         // mapping
 
+        [Pure]
         public Maybe<TReturn> Map<TReturn>(Func<TValue, TReturn> map)
         {
             return _hasValue
@@ -113,6 +120,7 @@ namespace SimpleMaybe
                 : Maybe.None<TReturn>();
         }
 
+        [Pure]
         public async Task<Maybe<TReturn>> MapAsync<TReturn>(Func<TValue, Task<TReturn>> map)
         {
             return _hasValue
@@ -120,6 +128,7 @@ namespace SimpleMaybe
                 : Maybe.None<TReturn>();
         }
 
+        [Pure]
         public Maybe<TReturn> FlatMap<TReturn>(Func<TValue, Maybe<TReturn>> map)
         {
             return _hasValue
@@ -127,6 +136,7 @@ namespace SimpleMaybe
                 : Maybe.None<TReturn>();
         }
 
+        [Pure]
         public async Task<Maybe<TReturn>> FlatMapAsync<TReturn>(Func<TValue, Task<Maybe<TReturn>>> map)
         {
             return _hasValue
@@ -146,6 +156,7 @@ namespace SimpleMaybe
             return !(left == right);
         }
 
+        [Pure]
         public bool Equals(Maybe<TValue> other)
         {
             if (HasValue && other.HasValue)
@@ -161,6 +172,7 @@ namespace SimpleMaybe
             return false;
         }
 
+        [Pure]
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -176,6 +188,7 @@ namespace SimpleMaybe
             return Equals((Maybe<TValue>) obj);
         }
 
+        [Pure]
         public override int GetHashCode()
         {
             return _value != null
@@ -185,6 +198,7 @@ namespace SimpleMaybe
 
         // diagnostics
 
+        [Pure]
         public override string ToString()
         {
             var typeName = typeof(TValue).Name;
