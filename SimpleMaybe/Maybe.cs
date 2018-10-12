@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SimpleMaybe
 {
-    public struct Maybe<TValue> : IEquatable<Maybe<TValue>>, IComparable<Maybe<TValue>>, IComparable
+    public struct Maybe<TValue> : IEquatable<Maybe<TValue>>
     {
         private readonly bool _hasValue;
         private readonly TValue _value;
@@ -194,39 +194,6 @@ namespace SimpleMaybe
             return _value != null
                 ? _value.GetHashCode()
                 : 0;
-        }
-
-        // comparison
-
-        int IComparable.CompareTo(object obj)
-        {
-            if (ReferenceEquals(obj, null))
-            {
-                return 1;
-            }
-
-            if (obj is Maybe<TValue> maybe)
-            {
-                return CompareTo(maybe);
-            }
-
-            throw new InvalidOperationException($"Cannot compare {this} with object of type {obj.GetType().Name}.");
-        }
-
-        [Pure]
-        public int CompareTo(Maybe<TValue> other)
-        {
-            if (HasValue && other.HasValue)
-            {
-                return Comparer<TValue>.Default.Compare(_value, other._value);
-            }
-
-            if (!HasValue && !other.HasValue)
-            {
-                return 0;
-            }
-
-            return HasValue ? 1 : -1;
         }
 
         // diagnostics
