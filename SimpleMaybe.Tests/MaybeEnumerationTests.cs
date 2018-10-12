@@ -39,13 +39,13 @@ namespace SimpleMaybe.Tests
         [Test]
         public void ienumerable_representation_of_some_contains_one_item()
         {
-            Maybe.Some(10).AsEnumerable().Should().Equal(10);
+            Maybe.Some(10).ToEnumerable().Should().Equal(10);
         }
 
         [Test]
         public void ienumerable_representation_of_none_is_empty()
         {
-            Maybe.None<int>().AsEnumerable().Should().BeEmpty();
+            Maybe.None<int>().ToEnumerable().Should().BeEmpty();
         }
     }
 }

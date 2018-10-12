@@ -24,7 +24,7 @@ namespace SimpleMaybe
         // enumeration
 
         [Pure]
-        public IEnumerable<TValue> AsEnumerable()
+        public IEnumerable<TValue> ToEnumerable()
         {
             if (_hasValue)
             {
@@ -35,7 +35,7 @@ namespace SimpleMaybe
         [Pure]
         public IEnumerator<TValue> GetEnumerator()
         {
-            return AsEnumerable().GetEnumerator();
+            return ToEnumerable().GetEnumerator();
         }
 
         // access
