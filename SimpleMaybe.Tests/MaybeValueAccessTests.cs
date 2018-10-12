@@ -2,6 +2,8 @@
 using FluentAssertions;
 using NUnit.Framework;
 
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed - we're testing for exceptions
+
 namespace SimpleMaybe.Tests
 {
     public class MaybeValueAccessTests
@@ -38,6 +40,13 @@ namespace SimpleMaybe.Tests
 
             Maybe.None<int>().ValueOrDefault(10).Should().Be(10);
             Maybe.None<string>().ValueOrDefault("aaa").Should().Be("aaa");
+        }
+
+        [Test]
+        public void can_get_nullable_value_from_maybe()
+        {
+            Maybe.Some(10).ToNullable().Should().Be(10);
+            Maybe.None<int>().ToNullable().Should().BeNull();
         }
     }
 }
