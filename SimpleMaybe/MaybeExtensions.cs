@@ -4,7 +4,6 @@ namespace SimpleMaybe
 {
     public static class MaybeExtensions
     {
-        // todo: test
         [Pure]
         public static TValue? ToNullable<TValue>(this Maybe<TValue> maybe)
             where TValue : struct

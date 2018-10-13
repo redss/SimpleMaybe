@@ -14,7 +14,10 @@ namespace SimpleMaybe
         {
             if (value == null)
             {
-                throw new InvalidOperationException($"Value of Maybe.Some<{typeof(TValue).Name}> cannot be null.");
+                throw new ArgumentException(
+                    message: $"Value of Maybe.Some<{typeof(TValue).Name}> cannot be null.",
+                    paramName: nameof(value)
+                );
             }
 
             _hasValue = true;
@@ -68,6 +71,9 @@ namespace SimpleMaybe
 
         public TReturn Match<TReturn>(Func<TValue, TReturn> some, Func<TReturn> none)
         {
+            if (some == null) throw new ArgumentNullException(nameof(some));
+            if (none == null) throw new ArgumentNullException(nameof(none));
+
             return _hasValue
                 ? some(_value)
                 : none();
@@ -100,6 +106,9 @@ namespace SimpleMaybe
 
         public void Match(Action<TValue> some, Action none)
         {
+            if (some == null) throw new ArgumentNullException(nameof(some));
+            if (none == null) throw new ArgumentNullException(nameof(none));
+
             if (_hasValue)
             {
                 some(_value);
@@ -112,36 +121,52 @@ namespace SimpleMaybe
 
         // mapping
 
+        // todo: handle these warnings
+
         [Pure]
         public Maybe<TReturn> Map<TReturn>(Func<TValue, TReturn> map)
         {
-            return _hasValue
-                ? Maybe.Some(map(_value))
-                : Maybe.None<TReturn>();
+            if (map == null) throw new ArgumentNullException(nameof(map));
+
+            return Match(
+                some: value => Maybe.Some(value: map(arg: value)),
+                none: () => Maybe.None<TReturn>()
+            );
         }
 
         [Pure]
         public async Task<Maybe<TReturn>> MapAsync<TReturn>(Func<TValue, Task<TReturn>> map)
         {
-            return _hasValue
-                ? Maybe.Some(await map(_value).ConfigureAwait(false))
-                : Maybe.None<TReturn>();
+            // todo: test
+            if (map == null) throw new ArgumentNullException(nameof(map));
+
+            return await MatchAsync(
+                some: async value => Maybe.Some(await map(value).ConfigureAwait(false)),
+                none: async () => Maybe.None<TReturn>()
+            );
         }
 
         [Pure]
         public Maybe<TReturn> FlatMap<TReturn>(Func<TValue, Maybe<TReturn>> map)
         {
-            return _hasValue
-                ? map(_value)
-                : Maybe.None<TReturn>();
+            if (map == null) throw new ArgumentNullException(nameof(map));
+
+            return Match(
+                some: value => map(value),
+                none: () => Maybe.None<TReturn>()
+            );
         }
 
         [Pure]
         public async Task<Maybe<TReturn>> FlatMapAsync<TReturn>(Func<TValue, Task<Maybe<TReturn>>> map)
         {
-            return _hasValue
-                ? await map(_value).ConfigureAwait(false)
-                : Maybe.None<TReturn>();
+            // todo: test
+            if (map == null) throw new ArgumentNullException(nameof(map));
+
+            return await MatchAsync(
+                some: async value => await map(value).ConfigureAwait(false),
+                none: async () => Maybe.None<TReturn>()
+            );
         }
 
         // equality

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 namespace SimpleMaybe
@@ -11,7 +12,7 @@ namespace SimpleMaybe
 
         public MaybeComparer(IComparer<TValue> valueComparer)
         {
-            _valueComparer = valueComparer;
+            _valueComparer = valueComparer ?? throw new ArgumentNullException(nameof(valueComparer));
         }
 
         [Pure]
@@ -25,7 +26,8 @@ namespace SimpleMaybe
                 none: () => second.Match(
                     some: secondValue => -1,
                     none: () => 0
-                ));
+                )
+            );
         }
     }
 }

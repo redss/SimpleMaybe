@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed - we're testing for exceptions
 
 namespace SimpleMaybe.Tests
 {
@@ -74,6 +77,29 @@ namespace SimpleMaybe.Tests
                 .FlatMapAsync(value => Task.FromResult(Maybe.None<int>()))
                 .Result
                 .Should().Be(Maybe.None<int>());
+        }
+
+        [TestCase(10)]
+        [TestCase(null)]
+        public void map_parameters_are_required(int? valueOrNull)
+        {
+            var maybe = valueOrNull.ToSomeOrNoneFromNullable();
+
+            ShouldRequireArgument(() => maybe.Map<int>(null));
+            ShouldRequireArgument(() => maybe.FlatMap<int>(null));
+
+            ShouldRequireArgument(() => maybe.FlatMapAsync<int>(null));
+            ShouldRequireArgument(() => maybe.FlatMapAsync<int>(null));
+        }
+
+        private void ShouldRequireArgument(Action action)
+        {
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        private void ShouldRequireArgument(Func<Task> action)
+        {
+            action.Should().Throw<ArgumentNullException>();
         }
     }
 }

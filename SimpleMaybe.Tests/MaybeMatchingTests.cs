@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
@@ -91,6 +91,41 @@ namespace SimpleMaybe.Tests
 
             someCount.Should().Be(0);
             noneCount.Should().Be(4);
+        }
+
+        [TestCase(10)]
+        [TestCase(null)]
+        public void match_parameters_are_required(int? valueOrNull)
+        {
+            var maybe = valueOrNull.ToSomeOrNoneFromNullable();
+
+            ShouldRequireArgument(() => maybe.Match(null, () => 0));
+            ShouldRequireArgument(() => maybe.Match(value => 0, null));
+
+            ShouldRequireArgument(() => maybe.Match(null, () => { }));
+            ShouldRequireArgument(() => maybe.Match(value => { }, null));
+
+            ShouldRequireArgument(() => maybe.MatchSome(null));
+            ShouldRequireArgument(() => maybe.MatchNone(null));
+
+            ShouldRequireArgument(() => maybe.MatchAsync(null, () => Task.FromResult(0)));
+            ShouldRequireArgument(() => maybe.MatchAsync(value => Task.FromResult(0), null));
+
+            ShouldRequireArgument(() => maybe.MatchAsync(null, () => Task.CompletedTask));
+            ShouldRequireArgument(() => maybe.MatchAsync(value => Task.CompletedTask, null));
+
+            ShouldRequireArgument(() => maybe.MatchSomeAsync(null));
+            ShouldRequireArgument(() => maybe.MatchNoneAsync(null));
+        }
+
+        private void ShouldRequireArgument(Action action)
+        {
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        private void ShouldRequireArgument(Func<Task> action)
+        {
+            action.Should().Throw<ArgumentNullException>();
         }
     }
 }

@@ -24,10 +24,10 @@ namespace SimpleMaybe.Tests
         public void cannot_create_some_with_a_null_value()
         {
             Action creatingSome = () => Maybe.Some<string>(null);
-            creatingSome.Should().Throw<InvalidOperationException>();
+            creatingSome.Should().Throw<ArgumentException>();
 
             Action creatingSomeNullable = () => Maybe.Some<int?>(null);
-            creatingSomeNullable.Should().Throw<InvalidOperationException>();
+            creatingSomeNullable.Should().Throw<ArgumentException>();
         }
 
         [Test]

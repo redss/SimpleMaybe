@@ -5,6 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed - we're testing for exceptions
+// ReSharper disable ObjectCreationAsStatement - we're testing for exceptions
 
 namespace SimpleMaybe.Tests
 {
@@ -80,6 +81,14 @@ namespace SimpleMaybe.Tests
         class ReverseIntComparer : IComparer<int>
         {
             public int Compare(int first, int second) => -first.CompareTo(second);
+        }
+
+        [Test]
+        public void value_comparer_is_required_for_maybe_comparer()
+        {
+            Action creatingComparer = () => new MaybeComparer<int>(null);
+
+            creatingComparer.Should().Throw<ArgumentNullException>();
         }
     }
 }
