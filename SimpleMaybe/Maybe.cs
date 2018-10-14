@@ -167,6 +167,28 @@ namespace SimpleMaybe
             );
         }
 
+        // filtering
+
+        public Maybe<TValue> Where(Func<TValue, bool> predicate)
+        {
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
+            return SelectMaybe(value => predicate(value)
+                ? Maybe.Some(value)
+                : Maybe.None<TValue>()
+            );
+        }
+
+        public async Task<Maybe<TValue>> WhereAsync(Func<TValue, Task<bool>> predicate)
+        {
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
+            return await SelectMaybeAsync(async value => await predicate(value)
+                ? Maybe.Some(value)
+                : Maybe.None<TValue>()
+            );
+        }
+
         // equality
 
         public static bool operator ==(Maybe<TValue> left, Maybe<TValue> right)
