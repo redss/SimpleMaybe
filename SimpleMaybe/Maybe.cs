@@ -119,52 +119,50 @@ namespace SimpleMaybe
             }
         }
 
-        // mapping
+        // selecting
 
         // todo: handle these warnings
 
         [Pure]
-        public Maybe<TReturn> Map<TReturn>(Func<TValue, TReturn> map)
+        public Maybe<TReturn> Select<TReturn>(Func<TValue, TReturn> selector)
         {
-            if (map == null) throw new ArgumentNullException(nameof(map));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Match(
-                some: value => Maybe.Some(value: map(arg: value)),
+                some: value => Maybe.Some(value: selector(arg: value)),
                 none: () => Maybe.None<TReturn>()
             );
         }
 
         [Pure]
-        public async Task<Maybe<TReturn>> MapAsync<TReturn>(Func<TValue, Task<TReturn>> map)
+        public async Task<Maybe<TReturn>> SelectAsync<TReturn>(Func<TValue, Task<TReturn>> selector)
         {
-            // todo: test
-            if (map == null) throw new ArgumentNullException(nameof(map));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return await MatchAsync(
-                some: async value => Maybe.Some(await map(value).ConfigureAwait(false)),
+                some: async value => Maybe.Some(await selector(value).ConfigureAwait(false)),
                 none: async () => Maybe.None<TReturn>()
             );
         }
 
         [Pure]
-        public Maybe<TReturn> FlatMap<TReturn>(Func<TValue, Maybe<TReturn>> map)
+        public Maybe<TReturn> SelectMaybe<TReturn>(Func<TValue, Maybe<TReturn>> selector)
         {
-            if (map == null) throw new ArgumentNullException(nameof(map));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Match(
-                some: value => map(value),
+                some: value => selector(value),
                 none: () => Maybe.None<TReturn>()
             );
         }
 
         [Pure]
-        public async Task<Maybe<TReturn>> FlatMapAsync<TReturn>(Func<TValue, Task<Maybe<TReturn>>> map)
+        public async Task<Maybe<TReturn>> SelectMaybeAsync<TReturn>(Func<TValue, Task<Maybe<TReturn>>> selector)
         {
-            // todo: test
-            if (map == null) throw new ArgumentNullException(nameof(map));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return await MatchAsync(
-                some: async value => await map(value).ConfigureAwait(false),
+                some: async value => await selector(value).ConfigureAwait(false),
                 none: async () => Maybe.None<TReturn>()
             );
         }

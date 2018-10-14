@@ -8,7 +8,7 @@ namespace SimpleMaybe.Tests
     public class MaybeMatchingTests
     {
         [Test]
-        public void can_match_and_map_maybe_value()
+        public void can_match_and_select_maybe_value()
         {
             Maybe.Some(10)
                 .Match(
