@@ -50,7 +50,7 @@ namespace SimpleMaybe.Tests
         [TestCase(null)]
         public void where_parameters_are_required(int? intOrNull)
         {
-            var maybe = intOrNull.ToSomeOrNoneFromNullable();
+            var maybe = intOrNull.ToMaybe();
 
             ShouldRequireArgument(() => maybe.Where(null));
             ShouldRequireArgument(() => maybe.WhereAsync(null));

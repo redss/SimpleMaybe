@@ -97,7 +97,7 @@ namespace SimpleMaybe.Tests
         [TestCase(null)]
         public void match_parameters_are_required(int? valueOrNull)
         {
-            var maybe = valueOrNull.ToSomeOrNoneFromNullable();
+            var maybe = valueOrNull.ToMaybe();
 
             ShouldRequireArgument(() => maybe.Match(null, () => 0));
             ShouldRequireArgument(() => maybe.Match(value => 0, null));

@@ -83,7 +83,7 @@ namespace SimpleMaybe.Tests
         [TestCase(null)]
         public void select_parameters_are_required(int? valueOrNull)
         {
-            var maybe = valueOrNull.ToSomeOrNoneFromNullable();
+            var maybe = valueOrNull.ToMaybe();
 
             ShouldRequireArgument(() => maybe.Select<int>(null));
             ShouldRequireArgument(() => maybe.SelectMaybe<int>(null));

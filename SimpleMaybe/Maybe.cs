@@ -12,14 +12,6 @@ namespace SimpleMaybe
 
         internal Maybe(TValue value)
         {
-            if (value == null)
-            {
-                throw new ArgumentException(
-                    message: $"Value of Maybe.Some<{typeof(TValue).Name}> cannot be null.",
-                    paramName: nameof(value)
-                );
-            }
-
             _hasValue = true;
             _value = value;
         }

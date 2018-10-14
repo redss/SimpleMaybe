@@ -1,21 +1,20 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace SimpleMaybe
 {
     [Pure]
     public static class Maybe
     {
+        // none
+
         [Pure]
         public static Maybe<TValue> None<TValue>()
         {
             return new Maybe<TValue>();
         }
 
-        [Pure]
-        public static Maybe<TValue> Some<TValue>(TValue value)
-        {
-            return new Maybe<TValue>(value: value);
-        }
+        // some
 
         [Pure]
         public static Maybe<TValue> ToSome<TValue>(this TValue value)
@@ -24,7 +23,47 @@ namespace SimpleMaybe
         }
 
         [Pure]
-        public static Maybe<TValue> SomeOrNone<TValue>(TValue valueOrNull)
+        public static Maybe<TValue> Some<TValue>(TValue value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(
+                    paramName: nameof(value),
+                    message: $"Value of Maybe.Some<{typeof(TValue).Name}> cannot be null."
+                );
+            }
+
+            return new Maybe<TValue>(value);
+        }
+
+        // some from nullable
+
+        [Pure]
+        public static Maybe<TValue> ToSome<TValue>(this TValue? value)
+            where TValue : struct
+        {
+            return Some(value);
+        }
+
+        [Pure]
+        public static Maybe<TValue> Some<TValue>(TValue? value)
+            where TValue : struct
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(
+                    paramName: nameof(value),
+                    message: $"Value of Maybe.Some<{typeof(TValue).Name}> cannot be null."
+                );
+            }
+
+            return new Maybe<TValue>(value.Value);
+        }
+
+        // some or none from reference type
+
+        [Pure]
+        public static Maybe<TValue> FromReference<TValue>(TValue valueOrNull)
             where TValue : class
         {
             return valueOrNull == null
@@ -33,14 +72,16 @@ namespace SimpleMaybe
         }
 
         [Pure]
-        public static Maybe<TValue> ToSomeOrNone<TValue>(this TValue value)
+        public static Maybe<TValue> ToMaybe<TValue>(this TValue valueOrNull)
             where TValue : class
         {
-            return SomeOrNone(value);
+            return FromReference(valueOrNull);
         }
 
+        // some or none from nullable
+        
         [Pure]
-        public static Maybe<TValue> SomeOrNoneFromNullable<TValue>(TValue? value)
+        public static Maybe<TValue> FromNullable<TValue>(TValue? value)
             where TValue : struct
         {
             return value == null
@@ -49,10 +90,10 @@ namespace SimpleMaybe
         }
 
         [Pure]
-        public static Maybe<TValue> ToSomeOrNoneFromNullable<TValue>(this TValue? value)
+        public static Maybe<TValue> ToMaybe<TValue>(this TValue? value)
             where TValue : struct
         {
-            return SomeOrNoneFromNullable(value);
+            return FromNullable(value);
         }
     }
 }
