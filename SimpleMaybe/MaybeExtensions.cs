@@ -13,5 +13,10 @@ namespace SimpleMaybe
                 none: () => null
             );
         }
+
+        public static Maybe<TValue> SelectMaybe<TValue>(this Maybe<Maybe<TValue>> maybeOfMaybe)
+        {
+            return maybeOfMaybe.SelectMaybe(maybe => maybe);
+        }
     }
 }

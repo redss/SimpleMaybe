@@ -81,6 +81,17 @@ namespace SimpleMaybe.Tests
 
         [TestCase(10)]
         [TestCase(null)]
+        public void maybe_of_maybe_can_be_flattened(int? valueOrNull)
+        {
+            var maybe = valueOrNull.ToMaybe();
+            
+            Maybe.Some(maybe)
+                .SelectMaybe()
+                .Should().Be(maybe);
+        }
+
+        [TestCase(10)]
+        [TestCase(null)]
         public void select_parameters_are_required(int? valueOrNull)
         {
             var maybe = valueOrNull.ToMaybe();
